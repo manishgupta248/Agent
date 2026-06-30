@@ -9,7 +9,7 @@ def test_gemini():
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents="Reply with exactly one word: OK"
+            contents="Reply with exactly one word: What is the capital of France?",
         )
 
         print("\nSUCCESS\n")

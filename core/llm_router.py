@@ -8,7 +8,8 @@ from core.logger import logger
 groq_client = Groq(api_key=GROQ_API_KEY)
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
+# GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 GEMINI_MODEL = "gemini-2.5-flash"
 
 
@@ -57,3 +58,15 @@ def get_llm_response(messages: list[dict]) -> dict:
         except Exception as fallback_error:
             logger.error(f"Gemini fallback also failed: {fallback_error}")
             raise RuntimeError("Both Groq and Gemini failed.") from fallback_error
+        
+
+def call_groq_with_tools(messages: list, tools: list):
+    """Returns the raw Groq response object (not just text), since we need
+    to inspect tool_calls before deciding the next step."""
+    return groq_client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=messages,
+        tools=tools,
+        tool_choice="auto",
+        temperature=0,
+    )
