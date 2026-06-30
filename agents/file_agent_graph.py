@@ -6,6 +6,7 @@ from agents.graph_state import AgentState
 from core.llm_router import call_groq_with_tools
 from core.logger import logger
 from tools.tool_registry import TOOL_FUNCTIONS, TOOL_SCHEMAS
+from core.llm_router import call_groq_with_tools, call_gemini_with_tools
 
 SYSTEM_PROMPT = {
     "role": "system",
@@ -21,35 +22,36 @@ def agent_node(state: AgentState) -> dict:
     messages = [SYSTEM_PROMPT] + state["messages"]
 
     try:
+        logger.info("Attempting Groq (primary)...")
         response = call_groq_with_tools(messages, TOOL_SCHEMAS)
-    except BadRequestError as e:
-        if "tool_use_failed" in str(e):
-            logger.warning(f"Tool call generation failed, retrying once: {e}")
-            response = call_groq_with_tools(messages, TOOL_SCHEMAS)
-        else:
-            raise
+        msg = response.choices[0].message
 
-    msg = response.choices[0].message
+        msg_dict = {"role": "assistant", "content": msg.content}
+        if msg.tool_calls:
+            msg_dict["tool_calls"] = [
+                {
+                    "id": tc.id,
+                    "type": "function",
+                    "function": {"name": tc.function.name, "arguments": tc.function.arguments},
+                }
+                for tc in msg.tool_calls
+            ]
+        logger.info("Groq responded successfully.")
+        return {"messages": [msg_dict]}
 
-    # Convert Groq SDK message object -> plain dict
-    msg_dict = {
-        "role": "assistant",
-        "content": msg.content,
-    }
-    if msg.tool_calls:
-        msg_dict["tool_calls"] = [
-            {
-                "id": tc.id,
-                "type": "function",
-                "function": {
-                    "name": tc.function.name,
-                    "arguments": tc.function.arguments,
-                },
-            }
-            for tc in msg.tool_calls
-        ]
+    except Exception as e:
+        error_str = str(e).lower()
+        is_rate_limit = "429" in error_str or "rate" in error_str or "tool_use_failed" in error_str
+        logger.warning(f"Groq failed ({'rate limit/tool error' if is_rate_limit else 'error'}): {e}")
+        logger.info("Falling back to Gemini for tool-calling...")
 
-    return {"messages": [msg_dict]}
+        try:
+            msg_dict = call_gemini_with_tools(messages, TOOL_SCHEMAS)
+            logger.info("Gemini responded successfully.")
+            return {"messages": [msg_dict]}
+        except Exception as fallback_error:
+            logger.error(f"Gemini fallback also failed: {fallback_error}")
+            raise RuntimeError("Both Groq and Gemini failed.") from fallback_error
 
 
 def tools_node(state: AgentState) -> dict:
