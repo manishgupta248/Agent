@@ -1,4 +1,5 @@
 from tools.gmail_tools import fetch_unread_emails
+from tools.drive_tools import upload_file_to_drive
 
 from tools.file_tools import (
     read_text_file,
@@ -14,6 +15,7 @@ TOOL_FUNCTIONS = {
     "read_csv_summary": read_csv_summary,
     "read_excel_summary": read_excel_summary,
     "fetch_unread_emails": fetch_unread_emails,
+    "upload_file_to_drive": upload_file_to_drive,
 }
 
 # Description sent to the LLM so it knows what tools exist and how to call them
@@ -83,6 +85,21 @@ TOOL_SCHEMAS = [
                 "max_results": {"type": "integer", "description": "Number of emails to fetch (default 5)"}
             },
             "required": [],
+        },
+    },
+},
+    {
+    "type": "function",
+    "function": {
+        "name": "upload_file_to_drive",
+        "description": "Upload a file from the local data/ folder to Google Drive.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "filename": {"type": "string"},
+                "drive_folder_id": {"type": "string"}
+            },
+            "required": ["filename"],
         },
     },
 },
