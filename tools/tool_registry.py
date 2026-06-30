@@ -1,3 +1,5 @@
+from tools.gmail_tools import fetch_unread_emails
+
 from tools.file_tools import (
     read_text_file,
     write_text_file,
@@ -11,6 +13,7 @@ TOOL_FUNCTIONS = {
     "write_text_file": write_text_file,
     "read_csv_summary": read_csv_summary,
     "read_excel_summary": read_excel_summary,
+    "fetch_unread_emails": fetch_unread_emails,
 }
 
 # Description sent to the LLM so it knows what tools exist and how to call them
@@ -69,4 +72,18 @@ TOOL_SCHEMAS = [
             },
         },
     },
+    {
+    "type": "function",
+    "function": {
+        "name": "fetch_unread_emails",
+        "description": "Fetch the most recent unread emails from Gmail inbox, including sender, subject, and a short snippet.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "max_results": {"type": "integer", "description": "Number of emails to fetch (default 5)"}
+            },
+            "required": [],
+        },
+    },
+},
 ]
