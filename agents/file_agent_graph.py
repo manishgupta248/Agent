@@ -11,15 +11,41 @@ from core.llm_router import call_groq_with_tools, call_gemini_with_tools
 SYSTEM_PROMPT = {
     "role": "system",
     "content": (
-        "You are a local file assistant. Use the available tools to "
-        "read or write files in the data folder when needed. "
-        "Give a clear final answer once you have the information."
+        "You are a local file and communication assistant. "
+        "Rules:\n"
+        "1. Only call a tool if it is necessary to answer the request.\n"
+        "2. NEVER invent a filename. Only call read_text_file on a filename "
+        "that was explicitly mentioned by the user or that you yourself just "
+        "created with write_text_file in this same conversation.\n"
+        "3. If a tool result (e.g. fetch_unread_emails) already contains the "
+        "information needed to answer, use that information directly — do not "
+        "call another tool to 're-read' or 'verify' it.\n"
+        "4. Only state facts that are present in the tool outputs or the user's "
+        "message. If something is not known, say so explicitly instead of guessing.\n"
+        "5. Once you have enough information, stop calling tools and give a "
+        "final answer."
     ),
 }
 
+MAX_TOOL_CALLS = 6
 
 def agent_node(state: AgentState) -> dict:
     messages = [SYSTEM_PROMPT] + state["messages"]
+    tool_call_count = state.get("tool_call_count", 0)
+
+    # Force a final answer instead of crashing once we're near the limit
+    if tool_call_count >= MAX_TOOL_CALLS:
+        messages.append({
+            "role": "system",
+            "content": "You have used the maximum number of tool calls. "
+                       "Give your best final answer now using only what you already know.",
+        })
+        try:
+            response = call_groq_with_tools(messages, [])  # no tools offered
+            msg = response.choices[0].message
+            return {"messages": [{"role": "assistant", "content": msg.content}]}
+        except Exception:
+            return {"messages": [{"role": "assistant", "content": "I wasn't able to complete this request."}]}
 
     try:
         logger.info("Attempting Groq (primary)...")
@@ -51,7 +77,7 @@ def agent_node(state: AgentState) -> dict:
             return {"messages": [msg_dict]}
         except Exception as fallback_error:
             logger.error(f"Gemini fallback also failed: {fallback_error}")
-            raise RuntimeError("Both Groq and Gemini failed.") from fallback_error
+            return {"messages": [{"role": "assistant", "content": "I'm having trouble reaching the AI services right now."}]}
 
 
 def tools_node(state: AgentState) -> dict:
@@ -73,15 +99,16 @@ def tools_node(state: AgentState) -> dict:
                 result = f"Error running {tool_name}: {e}"
                 logger.error(result)
 
-        results.append(
-            {
-                "role": "tool",
-                "tool_call_id": tool_call["id"],
-                "content": str(result),
-            }
-        )
+        results.append({
+            "role": "tool",
+            "tool_call_id": tool_call["id"],
+            "content": str(result),
+        })
 
-    return {"messages": results}
+    return {
+        "messages": results,
+        "tool_call_count": state.get("tool_call_count", 0) + 1,
+    }
 
 
 def should_continue(state: AgentState) -> str:
