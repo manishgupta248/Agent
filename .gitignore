@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 logs/
 memory/
+
+config/google/credentials.json
+config/google/token.json
