@@ -1,0 +1,21 @@
+Unread Email Summary:
+
+1. Sender: Google (no-reply@accounts.google.com)
+   Subject: Security alert
+   Summary: Notification of a new sign-in on a Windows device for your Google account.
+
+2. Sender: Zerodha (noreply-ipo@qmailer.zerodha.net)
+   Subject: Waterways Leisure Tourism (Cordelia Cruises) IPO - Allotment not received
+   Summary: You did not receive an allotment for the Waterways Leisure Tourism IPO (application UBB15111002279).
+
+3. Sender: Zerodha (noreply-ipo@qmailer.zerodha.net)
+   Subject: Advit Jewels IPO - Allotment not received
+   Summary: You did not receive an allotment for the Advit Jewels IPO (application UBB15111187215).
+
+4. Sender: ADVIT JEWELS LIMITED (green_bss@bigshareonline.com)
+   Subject: ADVIT JEWELS LIMITED - IPO - Allotment Advice cum Refund Intimation.
+   Summary: Details of allotment and refund for your Advit Jewels IPO application.
+
+5. Sender: Google Payments (payments-noreply@google.com)
+   Subject: Google Cloud Platform & APIs: Update your tax info
+   Summary: Request to update tax information for Google Cloud services.
