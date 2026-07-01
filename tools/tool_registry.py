@@ -1,5 +1,5 @@
-from tools.gmail_tools import fetch_unread_emails
 from tools.drive_tools import upload_file_to_drive
+from tools.gmail_tools import fetch_unread_emails, send_email
 
 from tools.file_tools import (
     read_text_file,
@@ -15,6 +15,7 @@ TOOL_FUNCTIONS = {
     "read_csv_summary": read_csv_summary,
     "read_excel_summary": read_excel_summary,
     "fetch_unread_emails": fetch_unread_emails,
+    "send_email": send_email,
     "upload_file_to_drive": upload_file_to_drive,
 }
 
@@ -100,6 +101,22 @@ TOOL_SCHEMAS = [
                 "drive_folder_id": {"type": "string"}
             },
             "required": ["filename"],
+        },
+    },
+},
+    {
+    "type": "function",
+    "function": {
+        "name": "send_email",
+        "description": "Send an email from your Gmail account.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "to": {"type": "string", "description": "Recipient email address"},
+                "subject": {"type": "string", "description": "Email subject line"},
+                "body": {"type": "string", "description": "Plain text email body"}
+            },
+            "required": ["to", "subject", "body"],
         },
     },
 },

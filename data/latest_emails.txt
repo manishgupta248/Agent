@@ -1,0 +1,9 @@
+Recent Unread Emails:
+
+1. Sender: Manish Gupta <manish.gupta248@gmail.com>
+   Subject: Akriti Gupta
+   Snippet: "I Love you Akriti"
+
+2. Sender: Google <no-reply@accounts.google.com>
+   Subject: Security alert
+   Snippet: "A new sign-in on Windows manish248gupta@gmail.com. We noticed a new sign-in to your Google Account on a Windows device. If this was you, you don’t need to do anything. If not, we’ll help you …"

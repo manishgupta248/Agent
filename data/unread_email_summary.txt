@@ -1,0 +1,43 @@
+Unread Email Summaries
+
+1. Sender: Manish Gupta <manish.gupta248@gmail.com>
+   Subject: Akriti Gupta
+   Action: No action needed; it’s a personal message.
+
+2. Sender: Google <no-reply@accounts.google.com>
+   Subject: Security alert
+   Action: Verify whether the sign‑in was you; if not, follow Google’s help steps.
+
+3. Sender: Zerodha <noreply-ipo@qmailer.zerodha.net>
+   Subject: Waterways Leisure Tourism (Cordelia Cruises) IPO – Allotment not received
+   Action: Note that you did not receive an allotment for this IPO; you may want to check the status on Zerodha.
+
+4. Sender: Zerodha <noreply-ipo@qmailer.zerodha.net>
+   Subject: Advit Jewels IPO – Allotment not received
+   Action: Note that you did not receive an allotment for this IPO; you may want to review the status on Zerodha.
+
+5. Sender: ADVIT JEWELS LIMITED <green_bss@bigshareonline.com>
+   Subject: ADVIT JEWELS LIMITED – IPO – Allotment Advice cum Refund Intimation
+   Action: Review the attached allotment and refund details.
+
+6. Sender: Google Payments <payments-noreply@google.com>
+   Subject: Google Cloud Platform & APIs: Update your tax info
+   Action: Update your tax information for Manish Gupta as soon as possible.
+
+7. Sender: waterwaysltl.ipo@in.mpms.mufg.com
+   Subject: Waterways Leisure Tourism Limited – IPO – Allotment Advice cum Unblocking Intimation
+   Action: Review the allotment advice and unblocking intimation for this IPO.
+
+8. Sender: Google <no-reply@accounts.google.com>
+   Subject: Security alert
+   Action: Same as #2 – verify the sign‑in; if it wasn’t you, follow Google’s help steps.
+
+9. Sender: Zerodha <noreply-ipo@qmailer.zerodha.net>
+   Subject: Your IPO application for Advit Jewels is submitted
+   Action: No immediate action; just note that the application has been submitted.
+
+10. Sender: Google Gemini <google-gemini-noreply@google.com>
+    Subject: Manish, you have access to daily help from Gemini
+    Action: No action required; optional to explore the new Gemini features.
+
+Total unread emails: 10.
