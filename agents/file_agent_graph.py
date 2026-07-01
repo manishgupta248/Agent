@@ -129,3 +129,27 @@ def build_file_agent_graph():
     graph.add_edge("tools", "agent")
 
     return graph.compile()
+
+def run_agent_with_history(user_text: str, history: list) -> tuple[str, list]:
+    """
+    Runs the agent with pre-loaded conversation history.
+    Returns (final_answer, updated_full_message_list).
+    """
+    app = build_file_agent_graph()
+
+    # Strip timestamps before sending to LLM (it only needs role + content)
+    clean_history = [
+        {"role": m["role"], "content": m["content"]}
+        for m in history
+        if m.get("role") in ("user", "assistant") and m.get("content")
+    ]
+
+    initial_messages = clean_history + [{"role": "user", "content": user_text}]
+
+    result = app.invoke(
+        {"messages": initial_messages, "tool_call_count": 0},
+        config={"recursion_limit": 15},
+    )
+
+    final_answer = result["messages"][-1]["content"]
+    return final_answer, result["messages"]
