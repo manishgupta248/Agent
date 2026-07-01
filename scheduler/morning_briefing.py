@@ -11,10 +11,12 @@ from memory.chat_memory import load_history, save_history, append_user_message, 
 BRIEFING_TIME = "07:00"  # 24hr format, local machine time
 
 BRIEFING_PROMPT = (
-    "Good morning! Please check my unread emails, give me a concise summary "
-    "of each one — sender, subject, and one sentence on what action (if any) "
-    "is needed. Only report facts from the email snippets, do not guess. "
-    "End with a count of total unread emails."
+    "Good morning! Please do the following:\n"
+    "1. Check my unread emails and give a concise summary of each — "
+    "sender, subject, and one sentence on what action (if any) is needed.\n"
+    "2. Check my Google Calendar for events today and the next 2 days.\n"
+    "Only report facts from the tool outputs. "
+    "End with total unread email count and total upcoming events count."
 )
 
 
